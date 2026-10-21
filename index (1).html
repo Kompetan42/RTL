@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geri Sayım Sayacı</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #101827;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .container { width: 100%; max-width: 650px; }
+    h1 { font-size: clamp(24px, 4vw, 38px); margin-bottom: 28px; }
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .item {
+      background: #1d2a40;
+      border-radius: 14px;
+      padding: 24px 8px;
+    }
+    .number { display: block; font-size: clamp(28px, 6vw, 52px); font-weight: bold; }
+    .label { display: block; margin-top: 8px; color: #bcc9dc; }
+    #message { min-height: 28px; margin-top: 24px; font-size: 20px; }
+    @media (max-width: 420px) {
+      .countdown { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Etkinliğe Kalan Süre</h1>
+    <div class="countdown" role="timer" aria-label="Etkinliğe kalan süre">
+      <div class="item"><span class="number" id="days">0</span><span class="label">Gün</span></div>
+      <div class="item"><span class="number" id="hours">00</span><span class="label">Saat</span></div>
+      <div class="item"><span class="number" id="minutes">00</span><span class="label">Dakika</span></div>
+      <div class="item"><span class="number" id="seconds">00</span><span class="label">Saniye</span></div>
+    </div>
+    <p id="message" aria-live="polite"></p>
+  </main>
+  <script>
+    // DEĞİŞTİR: Hedef tarih (yıl-ay-günT saat:dakika:saniye+03:00).
+    // +03:00, Türkiye saati içindir.
+    const targetDate = new Date("2027-10-01T00:00:00+03:00").getTime();
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const messageEl = document.getElementById("message");
+    const pad = value => String(value).padStart(2, "0");
+
+    function updateCountdown() {
+      const remaining = Math.max(0, targetDate - Date.now());
+      daysEl.textContent = Math.floor(remaining / 86400000);
+      hoursEl.textContent = pad(Math.floor((remaining % 86400000) / 3600000));
+      minutesEl.textContent = pad(Math.floor((remaining % 3600000) / 60000));
+      secondsEl.textContent = pad(Math.floor((remaining % 60000) / 1000));
+
+      if (remaining === 0) {
+        messageEl.textContent = "Süre doldu!";
+        clearInterval(intervalId);
+      }
+    }
+
+    const intervalId = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
