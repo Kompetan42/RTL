@@ -52,7 +52,7 @@
     // DEĞİŞTİR: Hedef tarih (yıl-ay-günT saat:dakika:saniye+03:00).
     // +03:00, Türkiye saati içindir.
     const targetDate = new Date("2027-10-05T00:00:00+03:00").getTime();
-
+//Rabbim bugünleri aratmasın.
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
     const minutesEl = document.getElementById("minutes");
@@ -68,7 +68,7 @@
       secondsEl.textContent = pad(Math.floor((remaining % 60000) / 1000));
 
       if (remaining === 0) {
-        messageEl.textContent = "Süre doldu!";
+        messageEl.textContent = "Süre doldu! Rabbim bugünleri aratmasın!";
         clearInterval(intervalId);
       }
     }
